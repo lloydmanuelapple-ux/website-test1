@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0d1d17">
+    <meta name="description" content="Create and review a Solana meme coin on Devnet with AI.Token.">
+    <link rel="canonical" href="https://ai.token.com/create.html">
+    <title>AI.Token | Create coin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/dashboard.css">
+    <script type="module" src="/creator.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/#markets" aria-label="AI.Token markets">
+        <span class="brand-mark" aria-hidden="true">AI</span>
+        <span class="brand-name">AI<span>.TOKEN</span></span>
+      </a>
+      <nav class="top-nav" aria-label="Main navigation">
+        <a class="nav-link" href="/#markets">Markets</a>
+        <a class="nav-link" href="/#market-chart">Chart</a>
+        <a class="nav-link active" href="/create.html" aria-current="page">Create coin</a>
+      </nav>
+      <div class="top-actions">
+        <label class="network-picker">
+          <span class="network-dot" aria-hidden="true"></span>
+          <select id="network" aria-label="Solana network">
+            <option value="devnet">Devnet</option>
+            <option value="mainnet-beta" disabled>Mainnet unavailable</option>
+          </select>
+        </label>
+        <button class="wallet-button" id="wallet-button" type="button" aria-label="Connect Phantom wallet">
+          <span class="wallet-icon" aria-hidden="true">↗</span>
+          <span id="wallet-label">Connect Phantom</span>
+        </button>
+        <a class="phantom-install" id="phantom-install" href="https://phantom.app/download" target="_blank" rel="noreferrer" hidden>Install Phantom <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main id="builder" class="creator-main">
+      <section class="page-intro creator-intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> SOLANA DEVNET CREATOR</p>
+          <h1>Make a coin. <em>Start on Devnet.</em></h1>
+          <p class="intro-copy">Set your supply and mint authorities, review the transaction, and approve it with Phantom. Mainnet creation is not enabled.</p>
+        </div>
+        <div class="draft-status" aria-live="polite">
+          <span class="status-dot"></span>
+          <span id="draft-status-text">New token draft</span>
+        </div>
+      </section>
+
+      <div class="workspace-grid">
+        <section class="builder-panel" aria-labelledby="details-heading">
+          <div class="section-heading">
+            <div>
+              <p class="step-label">01 <span>·</span> TOKEN SETUP</p>
+              <h2 id="details-heading">Coin details</h2>
+            </div>
+            <span class="required-note">ALL FIELDS REQUIRED</span>
+          </div>
+
+          <form id="token-form" novalidate>
+            <div class="field-row">
+              <label class="field field-name">
+                <span class="field-label">Coin name</span>
+                <input id="token-name" name="name" type="text" maxlength="32" placeholder="e.g. Field Notes" autocomplete="off" required>
+                <span class="field-hint">The full name of your coin</span>
+              </label>
+              <label class="field field-symbol">
+                <span class="field-label">Ticker</span>
+                <input id="token-symbol" name="symbol" type="text" maxlength="10" placeholder="e.g. FIELD" autocomplete="off" required>
+                <span class="field-hint">Preview label only; metadata is not uploaded</span>
+              </label>
+            </div>
+
+            <section class="logo-upload-section" aria-labelledby="logo-upload-title">
+              <div class="logo-upload-heading">
+                <div><p class="step-label">COIN ART <span>·</span> OPTIONAL</p><h3 id="logo-upload-title">Add a logo preview</h3></div>
+                <span class="logo-format">JPG / JPEG</span>
+              </div>
+              <label class="field logo-url-field">
+                <span class="field-label">Public image URL</span>
+                <input id="token-image-url" name="imageUrl" type="url" placeholder="https://example.com/your-coin.jpg" autocomplete="url" aria-describedby="logo-url-help">
+                <span class="field-hint" id="logo-url-help">Use a direct public .jpg or .jpeg link</span>
+              </label>
+              <div class="logo-file-row">
+                <label class="logo-file-button" for="token-image-file"><span aria-hidden="true">↑</span> Choose a JPG from this device</label>
+                <input id="token-image-file" type="file" accept="image/jpeg,.jpg,.jpeg" hidden>
+                <span class="logo-file-name" id="logo-file-name">No local image selected</span>
+                <button class="logo-clear-button" id="clear-logo" type="button" disabled>Clear</button>
+              </div>
+              <p class="logo-status" id="logo-status" role="status">The image is previewed only. It is not uploaded or attached to the token.</p>
+            </section>
+
+            <div class="field-row">
+              <label class="field">
+                <span class="field-label">Initial supply</span>
+                <input id="token-supply" name="supply" type="number" min="1" max="1000000000000" step="1" value="1000000000" required>
+                <span class="field-hint">Whole tokens minted to your connected wallet</span>
+              </label>
+              <label class="field">
+                <span class="field-label">Decimal places</span>
+                <select id="token-decimals" name="decimals">
+                  <option value="0">0 · indivisible</option>
+                  <option value="2">2 · limited precision</option>
+                  <option value="6" selected>6 · common</option>
+                  <option value="9">9 · high precision</option>
+                </select>
+                <span class="field-hint">Smallest unit precision</span>
+              </label>
+            </div>
+
+            <div class="field-row market-cap-target-row">
+              <label class="field">
+                <span class="field-label">Target market cap (USD)</span>
+                <input id="market-cap-target" name="marketCapTarget" type="number" min="1" max="1000000000000000" step="1" value="1000000000" required>
+                <span class="field-hint">Planning target only; it does not affect the mint</span>
+              </label>
+            </div>
+
+            <div class="field-row pool-contribution-row">
+              <div class="field">
+                <span class="field-label">Coin request payment</span>
+                <div class="fixed-payment-amount">
+                  <div><span>Coin request</span><strong>0.5 SOL</strong></div>
+                  <div><span>Security fee (30%)</span><strong>0.15 SOL</strong></div>
+                  <div id="creator-extras-charge" hidden><span>Creator profile bundle</span><strong>0.1 SOL</strong></div>
+                  <div class="payment-total"><span>Total</span><strong id="payment-total">0.65 SOL</strong></div>
+                </div>
+                <span class="field-hint">Fixed Mainnet transfer to the project wallet. Network fee is separate.</span>
+              </div>
+            </div>
+
+            <fieldset class="creator-extras-fieldset">
+              <legend>Optional add-on</legend>
+              <label class="creator-extras-choice" for="creator-extras">
+                <input id="creator-extras" type="checkbox">
+                <span><strong>Creator profile and social links</strong><small>Creator name, website, X, Telegram, Discord, and a short description</small></span>
+                <strong class="creator-extras-price">+0.1 SOL</strong>
+              </label>
+              <div class="creator-extras-fields" id="creator-extras-fields" hidden>
+                <label class="field"><span class="field-label">Creator name</span><input id="creator-name" type="text" maxlength="64" placeholder="Name or display name" disabled></label>
+                <label class="field"><span class="field-label">Website</span><input id="creator-website" type="url" maxlength="500" placeholder="https://example.com" disabled></label>
+                <label class="field"><span class="field-label">X profile</span><input id="creator-x" type="url" maxlength="500" placeholder="https://x.com/yourname" disabled></label>
+                <label class="field"><span class="field-label">Telegram</span><input id="creator-telegram" type="url" maxlength="500" placeholder="https://t.me/yourgroup" disabled></label>
+                <label class="field"><span class="field-label">Discord invite</span><input id="creator-discord" type="url" maxlength="500" placeholder="https://discord.gg/yourinvite" disabled></label>
+                <label class="field creator-description-field"><span class="field-label">Short description</span><textarea id="creator-description" maxlength="280" rows="3" placeholder="Describe the creator or project" disabled></textarea></label>
+              </div>
+              <p class="field-hint">One-time bundle price: 0.1 SOL. Enter at least one detail to include the bundle.</p>
+            </fieldset>
+
+            <fieldset class="authority-fieldset">
+              <legend>Authority settings</legend>
+              <p class="fieldset-copy">Choose which controls remain with the creator after launch.</p>
+              <label class="authority-option">
+                <input id="mint-authority" type="checkbox">
+                <span class="toggle" aria-hidden="true"></span>
+                <span class="authority-text"><strong>Keep mint authority</strong><small>Allow more tokens to be created later</small></span>
+                <span class="authority-tag" id="mint-tag">REVOKED</span>
+              </label>
+              <label class="authority-option">
+                <input id="freeze-authority" type="checkbox">
+                <span class="toggle" aria-hidden="true"></span>
+                <span class="authority-text"><strong>Keep freeze authority</strong><small>Allow token accounts to be frozen</small></span>
+                <span class="authority-tag" id="freeze-tag">REVOKED</span>
+              </label>
+              <p class="authority-warning" id="authority-warning" hidden>Retained authorities preserve creator control and may affect holder trust. Explain your rationale before launch.</p>
+            </fieldset>
+
+            <div class="form-error" id="form-error" role="alert" hidden></div>
+            <div class="form-actions">
+              <button class="save-button" id="save-button" type="button"><span aria-hidden="true">↓</span> Save draft</button>
+              <button class="primary-button" type="submit">Continue to payment <span aria-hidden="true">↗</span></button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="side-column">
+          <section class="preview-panel" aria-labelledby="preview-heading">
+            <div class="preview-topline">
+              <h2 id="preview-heading">LIVE PREVIEW</h2>
+              <span class="preview-network" id="preview-network">DEVNET</span>
+            </div>
+            <div class="token-art" aria-hidden="true">
+              <div class="art-grid"></div>
+              <span class="art-orbit orbit-one"></span>
+              <span class="art-orbit orbit-two"></span>
+              <img class="token-logo-preview" id="token-logo-preview" alt="" referrerpolicy="no-referrer" hidden>
+              <span class="art-glyph" id="art-glyph">A</span>
+              <span class="art-caption">SOLANA / SPL</span>
+            </div>
+            <div class="token-identity">
+              <span class="token-avatar"><span id="token-avatar-initial">A</span><img id="token-avatar-image" alt="" referrerpolicy="no-referrer" hidden></span>
+              <div class="identity-copy">
+                <h3 id="preview-name">Your coin</h3>
+                <span id="preview-symbol">TICKER</span>
+              </div>
+              <span class="preview-badge">DRAFT</span>
+            </div>
+            <div class="preview-stats">
+              <div><span>INITIAL SUPPLY</span><strong id="preview-supply">1,000,000,000</strong></div>
+              <div><span>DECIMALS</span><strong id="preview-decimals">6</strong></div>
+            </div>
+            <div class="market-cap-preview">
+              <div><span>MARKET CAP TARGET</span><strong id="preview-market-cap">$1,000,000,000</strong></div>
+              <small id="preview-implied-price">~$1.00 / token</small>
+            </div>
+            <p class="preview-footnote">Devnet preview only. Logo is not uploaded to token metadata.</p>
+          </section>
+
+          <section class="checklist-panel" id="launch-checklist" aria-labelledby="checklist-heading">
+            <div class="checklist-heading-row">
+              <div>
+                <p class="step-label">02 <span>·</span> BEFORE YOU LAUNCH</p>
+                <h2 id="checklist-heading">Launch checklist</h2>
+              </div>
+              <span class="checklist-count" id="checklist-count">0 / 4</span>
+            </div>
+            <div class="checklist-items">
+              <label class="checklist-item"><input type="checkbox" class="checklist-check"><span class="check-mark" aria-hidden="true"></span><span>Define the coin's purpose</span></label>
+              <label class="checklist-item"><input type="checkbox" class="checklist-check"><span class="check-mark" aria-hidden="true"></span><span>Document supply distribution</span></label>
+              <label class="checklist-item"><input type="checkbox" class="checklist-check"><span class="check-mark" aria-hidden="true"></span><span>Review authority decisions</span></label>
+              <label class="checklist-item"><input type="checkbox" class="checklist-check"><span class="check-mark" aria-hidden="true"></span><span>Prepare metadata and artwork</span></label>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <section class="fee-review-panel" id="fee-review-panel" aria-labelledby="fee-review-title" hidden>
+          <div class="fee-review-heading"><div><p class="step-label">MAINNET PAYMENT</p><h2 id="fee-review-title">Confirm the exact transfer</h2></div><button class="review-cancel" id="cancel-fee-review" type="button">Cancel</button></div>
+        <div class="fee-review-facts">
+            <div class="fee-payment-breakdown"><span>BREAKDOWN</span><strong id="fee-payment-breakdown">0.5 SOL request + 0.15 SOL security fee (30%)</strong></div>
+            <div><span>TOTAL TRANSFER</span><strong id="fee-pool-amount">0.65 SOL</strong></div>
+          <div><span>FROM</span><strong id="fee-payer">--</strong></div>
+          <div class="fee-recipient-detail"><span>TO</span><div><strong id="fee-recipient">ffXZvHDiXH2i5Pq4cL2y7c4RPMcm53wijzvoHbkYoHn</strong><button class="copy-payment-address" id="copy-payment-address" type="button" title="Copy recipient address">Copy</button></div></div>
+          <div><span>NETWORK FEE</span><strong id="fee-network-cost">Phantom shows final fee</strong></div>
+          <div><span>NETWORK</span><strong>Solana Mainnet</strong></div>
+        </div>
+          <p class="fee-warning">The total shown above is sent to the AI.Token project wallet. It includes the coin request, 30% security fee, and any selected extras. Phantom may charge a separate network fee. This is not an on-chain pool deposit and does not automatically create or deliver tokens. Requests are handled by the creator.</p>
+        <label class="fee-ack"><input id="ack-fee-transfer" type="checkbox"><span class="risk-checkmark" aria-hidden="true"></span><span>I confirm the total shown above will be sent from my wallet to the displayed project wallet.</span></label>
+          <label class="fee-ack"><input id="ack-creator-queue" type="checkbox"><span class="risk-checkmark" aria-hidden="true"></span><span>I understand this is a direct Mainnet transfer and does not automatically create tokens.</span></label>
+        <button class="confirm-payment-button" id="confirm-fee-payment" type="button" disabled>Finish your coin · Pay 0.65 SOL</button>
+        <p class="payment-status" id="fee-status" role="status" aria-live="polite">Phantom will show the transaction before you sign.</p>
+        <a class="payment-explorer" id="fee-explorer" target="_blank" rel="noreferrer" hidden>View Mainnet payment ↗</a>
+      </section>
+
+      <section class="queue-result-panel" id="queue-result-panel" aria-labelledby="queue-result-title" hidden>
+        <div class="queue-spinner" id="queue-spinner" aria-hidden="true"></div>
+        <div class="queue-result-copy">
+          <p class="step-label">PRIVATE REQUEST STATUS</p>
+          <h2 id="queue-result-title">Verifying your payment…</h2>
+          <p id="queue-result-copy">Checking Mainnet confirmation and saving your request.</p>
+          <dl class="queue-receipt" id="queue-receipt" hidden>
+            <div><dt>REQUEST ID</dt><dd id="queue-request-id">--</dd></div>
+            <div><dt>COIN</dt><dd id="queue-coin-name">--</dd></div>
+            <div><dt>PAYMENT</dt><dd id="queue-pool-contribution">-- SOL</dd></div>
+            <div><dt>STATUS</dt><dd id="queue-request-status">Waiting for creator</dd></div>
+          </dl>
+          <div class="queue-actions">
+            <button class="save-button" id="retry-queue" type="button" hidden>Retry payment verification</button>
+            <button class="save-button" id="refresh-queue-status" type="button" hidden>Refresh status</button>
+            <a class="explorer-link" id="queue-payment-explorer" target="_blank" rel="noreferrer" hidden>View confirmed payment ↗</a>
+          </div>
+          <p class="queue-private-note" id="queue-private-note" hidden>This status is private to this browser. Keep this device/browser profile to check it later. No email or public investor list is used.</p>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <span><span class="footer-mark">AI</span> AI.TOKEN</span>
+          <p>Fixed 0.65 SOL Mainnet payment, including the 30% security fee, sent to the project wallet. Requests are privately queued for creator-managed creation.</p>
+        <a href="https://solana.com/docs/tokens" target="_blank" rel="noreferrer">Solana token docs <span aria-hidden="true">↗</span></a>
+      </footer>
+    </main>
+  </body>
+</html>

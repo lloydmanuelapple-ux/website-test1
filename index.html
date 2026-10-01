@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0d1d17">
+    <meta name="description" content="AI.Token is building alongside artificial intelligence, exploring useful tools and opportunities at the intersection of AI, technology, and crypto. Building for the AI-powered future.">
+    <link rel="canonical" href="https://ai.token.com/">
+    <title>AI.Token | Solana Meme Markets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/dashboard.css">
+    <script type="module" src="/dashboard.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#markets" aria-label="AI.Token markets">
+        <span class="brand-mark" aria-hidden="true">AI</span>
+        <span class="brand-name">AI<span>.TOKEN</span></span>
+      </a>
+      <nav class="top-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#markets">Markets</a>
+        <a class="nav-link" href="#market-chart">Chart</a>
+        <a class="nav-link" href="/create.html">Create coin</a>
+      </nav>
+      <div class="top-actions">
+        <span class="network-badge"><span></span> SOLANA</span>
+        <button class="wallet-button" id="wallet-button" type="button" aria-label="Connect Phantom wallet">
+          <span class="wallet-icon" aria-hidden="true">↗</span>
+          <span id="wallet-label">Connect Phantom</span>
+        </button>
+        <a class="phantom-install" id="phantom-install" href="https://phantom.app/download" target="_blank" rel="noreferrer" hidden>Install Phantom</a>
+      </div>
+    </header>
+
+    <main id="markets">
+      <section class="market-heading">
+        <div>
+          <p class="eyebrow"><span class="live-dot"></span> LIVE SOLANA MARKETS <span class="eyebrow-divider">/</span> DEX SCREENER</p>
+          <h1>Meme markets, <em>in motion.</em></h1>
+          <p class="intro-copy">Trending Solana pools ranked by activity. Follow price action, volume, and trade flow as it moves.</p>
+        </div>
+        <div class="feed-status" aria-live="polite">
+          <span class="feed-status-dot" id="feed-status-dot"></span>
+          <span id="feed-status-text">Connecting to market data…</span>
+          <button class="icon-button refresh-button" id="refresh-button" type="button" title="Refresh markets" aria-label="Refresh markets">⟳</button>
+        </div>
+      </section>
+
+      <section class="market-strip" aria-label="Market summary">
+        <div class="market-stat"><span>TRACKED PAIRS</span><strong id="stat-pairs">--</strong><small>trending pools</small></div>
+        <div class="market-stat"><span>24H POOL VOLUME</span><strong id="stat-volume">--</strong><small>tracked set</small></div>
+        <div class="market-stat"><span>GAINING</span><strong id="stat-gainers">--</strong><small>24h change</small></div>
+        <div class="market-stat"><span>TOP MOVER</span><strong id="stat-top-mover">--</strong><small id="stat-top-change">waiting for feed</small></div>
+        <div class="market-stat market-updated"><span>LAST UPDATE</span><strong id="stat-updated">--:--:--</strong><small>refresh every 30s</small></div>
+      </section>
+
+      <div class="terminal-grid">
+        <section class="chart-panel" id="market-chart" aria-labelledby="chart-title">
+          <div class="chart-header">
+            <div class="selected-asset">
+              <div class="selected-icon" id="selected-icon"><span id="selected-initial">?</span></div>
+              <div class="selected-copy">
+                <div class="selected-name-row"><h2 id="chart-title">Select a market</h2><span class="selected-symbol" id="chart-symbol">-- / USD</span></div>
+                <div class="selected-meta"><span id="chart-dex">Trending Solana pool</span><span class="meta-divider">·</span><span id="chart-address">Choose a token from the list</span></div>
+              </div>
+            </div>
+            <div class="price-block">
+              <strong id="chart-price">--</strong>
+              <span id="chart-change">--</span>
+            </div>
+          </div>
+
+          <div class="chart-toolbar">
+            <div class="interval-control" role="group" aria-label="Candle interval">
+              <button class="interval-button" data-interval="1m" type="button">1m</button>
+              <button class="interval-button active" data-interval="5m" type="button">5m</button>
+              <button class="interval-button" data-interval="15m" type="button">15m</button>
+              <button class="interval-button" data-interval="1h" type="button">1h</button>
+              <button class="interval-button" data-interval="4h" type="button">4h</button>
+              <button class="interval-button" data-interval="1d" type="button">1D</button>
+            </div>
+            <div class="drawing-tools" role="group" aria-label="Chart drawing tools">
+              <button class="tool-button active" data-tool="cursor" type="button" title="Cursor" aria-label="Cursor">↖</button>
+              <button class="tool-button" data-tool="trend" type="button" title="Draw trend line" aria-label="Draw trend line">／</button>
+              <button class="tool-button" data-tool="horizontal" type="button" title="Draw horizontal price line" aria-label="Draw horizontal price line">―</button>
+              <button class="tool-button clear-drawings" id="clear-drawings" type="button" title="Clear chart drawings" aria-label="Clear chart drawings">⌫</button>
+            </div>
+          </div>
+
+          <div class="chart-wrap">
+            <div id="price-chart" aria-label="Candlestick price chart"></div>
+            <div class="chart-state" id="chart-state"><span class="spinner"></span><span>Loading candle history…</span></div>
+            <div class="drawing-hint" id="drawing-hint" hidden></div>
+          </div>
+          <div class="chart-footer"><span>USD <span class="meta-divider">·</span> <span id="chart-candle-count">-- candles</span></span><span>Powered by GeckoTerminal <span class="meta-divider">·</span> Delayed pool data</span></div>
+        </section>
+
+        <aside class="markets-panel" aria-labelledby="markets-title">
+          <div class="markets-heading">
+            <div><p class="section-kicker">DISCOVERY FEED</p><h2 id="markets-title">Trending Solana</h2></div>
+            <span class="pair-count" id="pair-count">0 pairs</span>
+          </div>
+          <label class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="market-search" type="search" placeholder="Search name, ticker, address" autocomplete="off" aria-label="Search markets">
+            <kbd>/</kbd>
+          </label>
+          <div class="market-filters" role="group" aria-label="Market list filters">
+            <button class="filter-button active" data-filter="all" type="button">All</button>
+            <button class="filter-button" data-filter="gainers" type="button">Gainers</button>
+            <button class="filter-button" data-filter="losers" type="button">Losers</button>
+            <button class="filter-button" data-filter="watchlist" type="button">Watchlist <span id="watchlist-count">0</span></button>
+          </div>
+          <div class="market-table-wrap">
+            <table class="market-table">
+              <thead><tr>
+                <th><button class="sort-button active" data-sort="name" type="button">ASSET <span>↕</span></button></th>
+                <th><button class="sort-button" data-sort="priceUsd" type="button">PRICE <span>↕</span></button></th>
+                <th><button class="sort-button" data-sort="priceChange.h24" type="button">24H <span>↕</span></button></th>
+                <th><button class="sort-button" data-sort="volume24h" type="button">VOL <span>↕</span></button></th>
+              </tr></thead>
+              <tbody id="market-rows"></tbody>
+            </table>
+            <div class="market-state" id="market-state"><span class="spinner"></span><span>Finding active pools…</span></div>
+          </div>
+          <div class="market-panel-footer"><span>Top 60 trending pools</span><button id="load-more" type="button" hidden>Load more</button></div>
+        </aside>
+      </div>
+
+      <section class="flow-panel" aria-labelledby="flow-title">
+        <div class="flow-heading">
+          <div><p class="section-kicker">TRADE FLOW</p><h2 id="flow-title">Selected pair activity</h2></div>
+          <span class="flow-period">5 MIN <span class="live-dot"></span> LIVE SNAPSHOT</span>
+        </div>
+        <div class="flow-grid">
+          <div class="flow-stat"><span>5M VOLUME</span><strong id="flow-volume">--</strong></div>
+          <div class="flow-stat"><span>5M TRADES</span><strong id="flow-trades">--</strong></div>
+          <div class="flow-stat"><span>24H VOLUME</span><strong id="flow-volume-24h">--</strong></div>
+          <div class="flow-stat"><span>24H BUYS / SELLS</span><strong id="flow-trades-24h">--</strong></div>
+          <div class="flow-ratio"><div class="ratio-label"><span>BUY / SELL PRESSURE</span><strong id="buy-pressure-label">--</strong></div><div class="ratio-track"><span id="buy-pressure-bar"></span></div></div>
+        </div>
+      </section>
+
+      <section class="investment-panel" aria-labelledby="investment-title">
+        <div class="investment-heading">
+          <div><p class="section-kicker">PRE-TRADE REVIEW</p><h2 id="investment-title">Check the setup before you act.</h2></div>
+          <a class="source-link" id="risk-source-link" href="https://www.geckoterminal.com/solana/pools" target="_blank" rel="noreferrer">Review source pair ↗</a>
+        </div>
+        <div class="risk-facts">
+          <div><span>REPORTED LIQUIDITY</span><strong id="risk-liquidity">--</strong></div>
+          <div><span>POOL AGE</span><strong id="risk-pool-age">--</strong></div>
+          <div><span>24H CHANGE</span><strong id="risk-change">--</strong></div>
+          <div><span>DATA SOURCE</span><strong>GeckoTerminal</strong></div>
+        </div>
+        <div class="review-checklist" aria-label="Pre-trade checklist">
+          <label><input class="risk-check" type="checkbox"><span class="risk-checkmark" aria-hidden="true"></span><span>I verified the token mint address independently.</span></label>
+          <label><input class="risk-check" type="checkbox"><span class="risk-checkmark" aria-hidden="true"></span><span>I reviewed liquidity, pool depth, and recent trading volume.</span></label>
+          <label><input class="risk-check" type="checkbox"><span class="risk-checkmark" aria-hidden="true"></span><span>I checked route, slippage, and network fees at the venue before confirming.</span></label>
+          <label><input class="risk-check" type="checkbox"><span class="risk-checkmark" aria-hidden="true"></span><span>I understand meme tokens are volatile and I can lose my full position.</span></label>
+        </div>
+        <p class="risk-disclaimer">These checks are reminders, not a safety audit or insurance. Trending status does not verify ownership, contract behavior, liquidity lock, or legitimacy. AI.Token does not execute trades, guarantee returns, or protect funds from loss.</p>
+      </section>
+
+      <section class="contribution-panel" aria-labelledby="contribution-title">
+        <div class="contribution-heading">
+          <div><p class="section-kicker">DIRECT WALLET TRANSFER</p><h2 id="contribution-title">Contribute SOL</h2></div>
+          <span class="mainnet-badge"><span></span> SOLANA MAINNET</span>
+        </div>
+        <p class="contribution-copy">Send a voluntary SOL payment directly to the public AI.Token wallet below. Connect Phantom to prepare a transfer.</p>
+        <div class="recipient-row">
+          <div><span>RECIPIENT WALLET</span><strong id="recipient-address">ffXZvHDiXH2i5Pq4cL2y7c4RPMcm53wijzvoHbkYoHn</strong></div>
+          <button class="copy-button" id="copy-recipient" type="button" title="Copy recipient wallet" aria-label="Copy recipient wallet">▢</button>
+        </div>
+        <form id="payment-form" class="payment-form" novalidate>
+          <label class="payment-amount-label" for="payment-amount">Amount</label>
+          <div class="payment-amount-row">
+            <input id="payment-amount" name="amount" type="text" inputmode="decimal" autocomplete="off" placeholder="0.00" aria-describedby="payment-error">
+            <span class="amount-unit">SOL</span>
+            <button class="review-payment-button" type="submit">Review payment <span aria-hidden="true">→</span></button>
+          </div>
+          <p class="payment-error" id="payment-error" role="alert" hidden></p>
+        </form>
+        <section class="payment-review" id="payment-review" aria-labelledby="payment-review-title" hidden>
+          <div class="payment-review-heading"><strong id="payment-review-title">Review this transfer</strong><button class="review-cancel" id="cancel-payment" type="button">Cancel</button></div>
+          <div class="payment-review-facts"><span>YOU SEND<strong id="review-amount">-- SOL</strong></span><span>FROM<strong id="review-payer">--</strong></span><span>TO<strong id="review-recipient">--</strong></span><span>NETWORK<strong>Solana Mainnet</strong></span><span>ESTIMATED FEE<strong id="review-network-fee">Checking…</strong></span></div>
+          <p class="payment-disclaimer">This sends real SOL and cannot be reversed. This payment does not buy AI.Token, issue any tokens or shares, or promise a return. No loss protection or insurance is provided.</p>
+          <label class="payment-ack"><input id="ack-transfer" type="checkbox"><span class="risk-checkmark" aria-hidden="true"></span><span>I checked the recipient address and understand this transfer is irreversible.</span></label>
+          <label class="payment-ack"><input id="ack-no-return" type="checkbox"><span class="risk-checkmark" aria-hidden="true"></span><span>I understand this is a direct payment, not an investment product; no tokens or returns are provided.</span></label>
+          <button class="confirm-payment-button" id="confirm-payment" type="button" disabled>Connect Phantom to continue</button>
+          <p class="payment-status" id="payment-status" role="status" aria-live="polite">Phantom will show the final transaction and network fee before you sign.</p>
+          <a class="payment-explorer" id="payment-explorer" target="_blank" rel="noreferrer" hidden>View transaction in Explorer ↗</a>
+        </section>
+      </section>
+
+      <section class="brand-description" aria-labelledby="brand-description-title">
+        <p class="section-kicker">WHY AI.TOKEN</p>
+        <h2 id="brand-description-title">Building for the AI-powered future.</h2>
+        <p><strong>AI.Token</strong> is being built around one simple idea: as AI continues to evolve, we should evolve with it.</p>
+        <p>Our goal is to explore new ways of combining AI, technology, and the crypto ecosystem to create useful tools, experiences, and opportunities for our community. Rather than building around a single trend, we want AI.Token to grow alongside the rapidly changing world of artificial intelligence.</p>
+        <p>We’re looking toward what comes next — experimenting with new ideas, developing AI-powered solutions, and finding practical ways this technology can help people.</p>
+        <p class="brand-manifesto"><strong>AI is moving fast. We plan to move with it.</strong></p>
+        <p class="brand-signoff">AI.Token — <strong>Building for the AI-powered future.</strong></p>
+      </section>
+
+      <footer class="page-footer">
+        <span><span class="footer-mark">AI</span> AI.TOKEN</span>
+        <p>Market data is indicative and can be delayed or incomplete. This is not financial advice or a trade execution service.</p>
+        <a href="https://www.geckoterminal.com/solana/pools" target="_blank" rel="noreferrer">GeckoTerminal source <span aria-hidden="true">↗</span></a>
+      </footer>
+    </main>
+  </body>
+</html>

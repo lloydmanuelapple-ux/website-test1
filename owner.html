@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0d1d17">
+    <meta name="robots" content="noindex, nofollow">
+    <title>AI.Token | Private creator queue</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/dashboard.css">
+    <script type="module" src="/owner.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/create.html" aria-label="AI.Token creator">
+        <span class="brand-mark" aria-hidden="true">AI</span>
+        <span class="brand-name">AI<span>.TOKEN</span></span>
+      </a>
+      <nav class="top-nav" aria-label="Main navigation">
+        <a class="nav-link" href="/">Markets</a>
+        <a class="nav-link" href="/create.html">Create coin</a>
+        <a class="nav-link active" href="/owner.html" aria-current="page">Creator queue</a>
+      </nav>
+      <span class="network-badge"><span></span> PRIVATE</span>
+    </header>
+    <main class="owner-main">
+      <section class="market-heading">
+        <div>
+          <p class="eyebrow"><span class="live-dot"></span> AI.TOKEN / OPERATIONS</p>
+          <h1>Creator <em>queue.</em></h1>
+          <p class="intro-copy">Paid Devnet coin requests, visible only with the owner access token.</p>
+        </div>
+        <div class="feed-status" id="queue-status" role="status" aria-live="polite">Authenticate to view requests.</div>
+      </section>
+      <section class="owner-auth-panel">
+        <form id="owner-auth-form" class="owner-auth-form">
+          <label for="owner-token">Owner access token</label>
+          <input id="owner-token" type="password" autocomplete="off" required>
+          <button class="primary-button" type="submit">Unlock queue</button>
+        </form>
+      </section>
+      <section class="owner-queue-panel" aria-labelledby="owner-queue-title">
+        <div class="markets-heading"><div><p class="section-kicker">PRIVATE OPERATIONS</p><h2 id="owner-queue-title">Coin requests</h2></div><button class="icon-button" id="refresh-queue" type="button" aria-label="Refresh queue" title="Refresh queue">⟳</button></div>
+        <div class="owner-table-wrap">
+          <table class="market-table owner-table">
+            <thead><tr><th>COIN</th><th>PAYER WALLET</th><th>TOTAL PAYMENT</th><th>CREATOR EXTRAS</th><th>CREATED</th><th>STATUS</th></tr></thead>
+            <tbody id="owner-queue-rows"></tbody>
+          </table>
+          <div class="market-state" id="owner-queue-state">Authenticate to view the private queue.</div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
